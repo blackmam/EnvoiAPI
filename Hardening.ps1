@@ -41,7 +41,7 @@ function Encrypt-String($String, $Passphrase, $salt="rhHe5UHD4QUXp8mML7nkzNLu6SS
 #Recupeartion du num icar avec le repository pour la variable
 asnp VeeamPsSnapin
 $RepositoryCloud=(Get-VBRBackupRepository | where {$_.Type -eq "Cloud"}).name
-$RepositoryCloud = $RepositoryCloud -replace ‘G’,"”
+$RepositoryCloud = $RepositoryCloud -replace ‘G’,""
 $NumIcare = $RepositoryCloud
 
 #Appel de la fonction pour le Hash	
