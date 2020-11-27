@@ -74,7 +74,7 @@ Write-Host TASK VEEAM WAS REMOVED -ForegroundColor Yellow
 #$task.Triggers.Repetition.Interval = "PT1H" 
 #$task | Set-ScheduledTask -User "System"
 
-schtasks /create /RU "administrateur" /RP $NvxMdp /TN "Check Veeam" /TR "powershell.exe -ExecutionPolicy RemoteSigned -file C:\scripts\LastBackup.ps1" /sc DAILY /st 23:00 /f /RI 60 /du 24:00 /RL HIGHEST
+schtasks /create /RU "administrateur" /RP $NvxMdp /TN "CheckVeeam" /TR "powershell.exe -ExecutionPolicy RemoteSigned -file C:\scripts\LastBackup.ps1" /sc DAILY /st 23:00 /f /RI 60 /du 24:00 /RL HIGHEST
 #Lancemen du script-------------------------------------------------------
 #Powershell.exe -ExecutionPolicy RemoteSigned -WindowStyle Hidden -file C:\scripts\LastBackup.ps1
 
