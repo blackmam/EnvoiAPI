@@ -61,19 +61,20 @@ $task | Unregister-ScheduledTask -Confirm:$false
 Write-Host TASK VEEAM WAS REMOVED -ForegroundColor Yellow
 }
 #Création de la tache planifié pour le lancement du script-------------------------------------------------------
-$date = (Get-Date).ToString("dd/MM/yyyy")
-Write-Host "Création de la tache planifiée"
+#$date = (Get-Date).ToString("dd/MM/yyyy")
+#Write-Host "Création de la tache planifiée"
 #$MDP = Read-host "Mot de passe serveur"
 #schtasks /create /RU "Administrateur" /RP $MDP /MO 60 /TN CheckVeeam /TR "powershell.exe -ExecutionPolicy RemoteSigned -file C:\scripts\LastBackup.ps1" /ST:23:50 /SD:$Date /SC DAILY /RL HIGHEST /f
-$Time = New-ScheduledTaskTrigger -Daily -DaysInterval 1 -At 11PM 
-$User = "$env:computername\Administrateur"
-$PS = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument " C:\scripts\LastBackup.ps1"
-Register-ScheduledTask -TaskName "CheckVeeam" -Trigger $Time -Action $PS -RunLevel Highest
-$task=Get-ScheduledTask -TaskName "CheckVeeam"
-$task.Triggers.Repetition.Duration = "P1D" 
-$task.Triggers.Repetition.Interval = "PT1H" 
-$task | Set-ScheduledTask -User "System"
+#$Time = New-ScheduledTaskTrigger -Daily -DaysInterval 1 -At 11PM 
+#$User = "$env:computername\Administrateur"
+#$PS = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument " C:\scripts\LastBackup.ps1"
+#Register-ScheduledTask -TaskName "CheckVeeam" -Trigger $Time -Action $PS -RunLevel Highest
+#$task=Get-ScheduledTask -TaskName "CheckVeeam"
+#$task.Triggers.Repetition.Duration = "P1D" 
+#$task.Triggers.Repetition.Interval = "PT1H" 
+#$task | Set-ScheduledTask -User "System"
 
+schtasks /create /RU "administrateur" /RP $NvxMdp /TN "Check Veeam" /TR "powershell.exe -ExecutionPolicy RemoteSigned -file C:\scripts\LastBackup.ps1" /sc DAILY /st 23:00 /f /RI 60 /du 24:00 /RL HIGHEST
 #Lancemen du script-------------------------------------------------------
 #Powershell.exe -ExecutionPolicy RemoteSigned -WindowStyle Hidden -file C:\scripts\LastBackup.ps1
 
