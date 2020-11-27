@@ -72,7 +72,7 @@ Register-ScheduledTask -TaskName "CheckVeeam" -Trigger $Time -Action $PS -RunLev
 $task=Get-ScheduledTask -TaskName "CheckVeeam"
 $task.Triggers.Repetition.Duration = "P1D" 
 $task.Triggers.Repetition.Interval = "PT1H" 
-$task | Set-ScheduledTask -User $User -Password $NvxMdp
+$task | Set-ScheduledTask -User "System"
 
 #Lancemen du script-------------------------------------------------------
 #Powershell.exe -ExecutionPolicy RemoteSigned -WindowStyle Hidden -file C:\scripts\LastBackup.ps1
