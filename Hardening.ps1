@@ -1,4 +1,4 @@
-﻿#Fonction du hash avec SALT
+#Fonction du hash avec SALT
 function Encrypt-String($String, $Passphrase, $salt="rhHe5UHD4QUXp8mML7nkzNLu6SSujyRYtXbs3e5g", $init="POKNB rgth264yhdn", [switch]$arrayOutput)
 {
 	# Create a COM Object for RijndaelManaged Cryptography
@@ -49,7 +49,9 @@ $Pass ="HlqMmtNZVWPXseMiOQcIBujZCPJrlmlxEXykIImB"
 $NvxMdp = Encrypt-String $NumIcare $Pass
 	
 #Nouveau mot de passe Utilisateur
-net user Administrateur $NvxMdp
+$Password =  ConvertTo-SecureString $NvxMdp -AsPlainText -Force
+$UserAccount = Get-LocalUser -Name "Administrateur"
+$UserAccount | Set-LocalUser -Password $Password
 
 #Désactivation rdp
 Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 1
@@ -61,26 +63,23 @@ $task | Unregister-ScheduledTask -Confirm:$false
 Write-Host TASK VEEAM WAS REMOVED -ForegroundColor Yellow
 }
 #Création de la tache planifié pour le lancement du script-------------------------------------------------------
-#$date = (Get-Date).ToString("dd/MM/yyyy")
-#Write-Host "Création de la tache planifiée"
+$date = (Get-Date).ToString("dd/MM/yyyy")
+Write-Host "Création de la tache planifiée"
 #$MDP = Read-host "Mot de passe serveur"
 #schtasks /create /RU "Administrateur" /RP $MDP /MO 60 /TN CheckVeeam /TR "powershell.exe -ExecutionPolicy RemoteSigned -file C:\scripts\LastBackup.ps1" /ST:23:50 /SD:$Date /SC DAILY /RL HIGHEST /f
-#$Time = New-ScheduledTaskTrigger -Daily -DaysInterval 1 -At 11PM 
-#$User = "$env:computername\Administrateur"
-#$PS = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument " C:\scripts\LastBackup.ps1"
-#Register-ScheduledTask -TaskName "CheckVeeam" -Trigger $Time -Action $PS -RunLevel Highest
-#$task=Get-ScheduledTask -TaskName "CheckVeeam"
-#$task.Triggers.Repetition.Duration = "P1D" 
-#$task.Triggers.Repetition.Interval = "PT1H" 
-#$task | Set-ScheduledTask -User "System"
+$Time = New-ScheduledTaskTrigger -Daily -DaysInterval 1 -At 11PM 
+$User = "$env:computername\Administrateur"
+$PS = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument " C:\scripts\LastBackup.ps1"
+Register-ScheduledTask -TaskName "CheckVeeam" -Trigger $Time -Action $PS -RunLevel Highest
+$task=Get-ScheduledTask -TaskName "CheckVeeam"
+$task.Triggers.Repetition.Duration = "P1D" 
+$task.Triggers.Repetition.Interval = "PT1H" 
+$task | Set-ScheduledTask -User $User -Password $NvxMdp
 
-schtasks /create /RU "administrateur" /RP $NvxMdp /TN "Check_Veeam" /TR "powershell.exe -ExecutionPolicy RemoteSigned -file C:\scripts\LastBackup.ps1" /sc DAILY /st 23:00 /f /RI 60 /du 24:00 /RL HIGHEST
-#Lancemen du script-------------------------------------------------------
-#Powershell.exe -ExecutionPolicy RemoteSigned -WindowStyle Hidden -file C:\scripts\LastBackup.ps1
+#Lancement du script-------------------------------------------------------
 
-Start-ScheduledTask "Check_Veeam"
+Start-ScheduledTask "CheckVeeam"
 
 
 #Auto-Destruction du script
 Remove-Item -LiteralPath $MyInvocation.MyCommand.Path -Force
-
